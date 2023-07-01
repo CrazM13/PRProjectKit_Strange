@@ -22,7 +22,7 @@ public class FirstPersonCameraController : CameraControllerBase {
 		pitchRotation += -Input.GetAxis("Mouse Y") * sensitivity.y * (invertY ? -1 : 1);
 		pitchRotation = pitchContraints.Clamp(pitchRotation);
 
-		cameraRig.rotation = Quaternion.AngleAxis(yawRotation, Vector3.up);
+		cameraRig.localRotation = Quaternion.AngleAxis(yawRotation, Vector3.up);
 		cameraTransform.localRotation = Quaternion.AngleAxis(pitchRotation, Vector3.right);
 	}
 
