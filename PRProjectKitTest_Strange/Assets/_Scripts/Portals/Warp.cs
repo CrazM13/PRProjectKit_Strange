@@ -31,7 +31,7 @@ public class Warp : MonoBehaviour {
 		Vector3 enterDirection = other.transform.position - transform.position;
 		float angle = Vector3.Angle(transform.forward, enterDirection);
 		if (angle < 90) {
-			WarpObject(other.transform);
+			WarpObject(other.transform.root);
 		}
 
 		//{
@@ -60,6 +60,15 @@ public class Warp : MonoBehaviour {
 			Vector3 relativePosition = transform.InverseTransformPoint(@object.position);
 			relativePosition = Vector3.Scale(relativePosition, new Vector3(-1, 1, -1));
 			@object.position = partner.transform.TransformPoint(relativePosition);
+
+
+			// Set Vecolity
+			Rigidbody rb = @object.GetComponent<Rigidbody>();
+			if (rb) {
+				Vector3 relativeVelocity = transform.InverseTransformDirection(rb.velocity);
+				relativeVelocity = Vector3.Scale(relativeVelocity, new Vector3(-1, 1, -1));
+				rb.velocity = partner.transform.TransformDirection(relativeVelocity);
+			}
 		}
 	}
 
