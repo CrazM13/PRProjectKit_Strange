@@ -10,7 +10,7 @@ public class HandController : MonoBehaviour {
 
 	private Camera mainCamera;
 
-	private ItemBase heldItem;
+	private BaseInteractable heldItem;
 
 	// Start is called before the first frame update
 	void Start() {
@@ -30,7 +30,7 @@ public class HandController : MonoBehaviour {
 				if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out RaycastHit hit, maxGrabDistance)) {
 
 					// Pickup Item
-					ItemBase newItem = hit.collider.GetComponentInParent<ItemBase>();
+					BaseInteractable newItem = hit.collider.GetComponentInParent<BaseInteractable>();
 					if (newItem) {
 						newItem.Interact(this);
 					}
@@ -39,7 +39,7 @@ public class HandController : MonoBehaviour {
 		}
 	}
 
-	public void HoldItem(ItemBase item) {
+	public void HoldItem(BaseInteractable item) {
 		if (item) {
 			item.transform.SetParent(transform);
 			item.transform.localPosition = Vector3.zero;

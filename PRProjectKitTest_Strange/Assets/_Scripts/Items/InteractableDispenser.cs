@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CoffeeMachine : ItemBase {
+public class InteractableDispenser : BaseInteractable {
 
-	[SerializeField] private ItemBase coffeePrefab;
+	[SerializeField] private BaseInteractable interactablePrefab;
 
 	public override void Interact(HandController hand) {
 
-		ItemBase newCoffee = Instantiate(coffeePrefab.gameObject).GetComponent<ItemBase>();
+		BaseInteractable newCoffee = Instantiate(interactablePrefab.gameObject).GetComponent<BaseInteractable>();
 
 		newCoffee.Interact(hand);
 	}

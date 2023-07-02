@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GoalItem : ItemBase {
+public class Item : BaseInteractable {
 
 	[SerializeField] private new Rigidbody rigidbody;
 	[SerializeField] private new Collider collider;
