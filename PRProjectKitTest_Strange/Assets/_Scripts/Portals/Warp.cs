@@ -10,41 +10,43 @@ public class Warp : MonoBehaviour {
 	[SerializeField] private byte warpInstance;
 
 	[Header("Warp Partner")]
-	[SerializeField] private string partnerInstance;
+	[SerializeField] private byte partnerInstance;
+
+	[Header("Settings")]
+	[SerializeField] private bool startActive;
+
+	private bool isWarpActive = false;
+	public bool IsWarpActive {
+		get => isWarpActive;
+		set {
+			isWarpActive = value;
+
+			// Activate/Deactivate
+		}
+	}
 
 	private void Start() {
 		WarpManager.Instance.RegisterWarp(this);
 
-		Debug.Log($"KEY: {Key}", gameObject);
+		if (startActive) IsWarpActive = true;
 	}
 
-	public void SetPartnerKey(string warpKey) {
-		partnerInstance = warpKey;
+	public void SetPartnerInstance(byte warpInstance) {
+		partnerInstance = warpInstance;
 	}
 
-	public string PartnerKey => $"LEVEL{warpLevel}:CODE{warpCode}:OBJ{partnerInstance}";
+	public string PartnerKey => BytesToKey(warpLevel, warpCode, partnerInstance);
 	public Warp Partner => WarpManager.Instance.GetWarp(PartnerKey);
-	public string Key => $"LEVEL{warpLevel}:CODE{warpCode}:OBJ{warpInstance}";
+	public string Key => BytesToKey(warpLevel, warpCode, warpInstance);
 
 	private void OnTriggerEnter(Collider other) {
-
-		Vector3 enterDirection = other.transform.position - transform.position;
-		float angle = Vector3.Angle(transform.forward, enterDirection);
-		if (angle < 90) {
-			WarpObject(other.transform.root);
+		if (isWarpActive) {
+			Vector3 enterDirection = other.transform.position - transform.position;
+			float angle = Vector3.Angle(transform.forward, enterDirection);
+			if (angle < 90) {
+				WarpObject(other.transform.root);
+			}
 		}
-
-		//{
-		//
-		//	Rigidbody rigidbody = other.attachedRigidbody;
-		//
-		//	if (rigidbody && rigidbody.velocity.sqrMagnitude > 0) {
-		//		float angle = Vector3.Angle(transform.forward, rigidbody.velocity);
-		//		if (angle < 90) {
-		//			WarpObject(other.transform);
-		//		}
-		//	}
-		//}
 	}
 
 	private void WarpObject(Transform @object) {
@@ -70,6 +72,14 @@ public class Warp : MonoBehaviour {
 				rb.velocity = partner.transform.TransformDirection(relativeVelocity);
 			}
 		}
+	}
+
+	public bool IsLevel(byte level) => level == this.warpLevel;
+	public bool IsCode(byte code) => code == this.warpCode;
+	public bool IsInstance(byte instance) => instance == this.warpInstance;
+
+	public static string BytesToKey(byte level, byte code, byte instance) {
+		return $"LEVEL{level}:CODE{code}:OBJ{instance}";
 	}
 
 }

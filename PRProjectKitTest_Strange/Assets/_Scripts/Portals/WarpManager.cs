@@ -25,8 +25,32 @@ public class WarpManager {
 		}
 	}
 
+	public void ActivateWarpsByLevel(byte level, bool isActive = true) {
+		foreach ((string _, Warp warp) in warps) {
+			if (warp.IsLevel(level)) warp.IsWarpActive = isActive;
+		}
+	}
 
-	public void ActivateWarps(string key) {
+	public void ActivateWarpsByCode(byte level, byte code, bool isActive = true) {
+		foreach ((string _, Warp warp) in warps) {
+			if (warp.IsLevel(level) && warp.IsCode(code)) warp.IsWarpActive = isActive;
+		}
+	}
+
+	public void ActivateWarpsByInstance(byte level, byte code, byte instance, bool isActive = true) {
+		string checkKey = Warp.BytesToKey(level, code, instance);
+
+		foreach ((string key, Warp warp) in warps) {
+			if (key == checkKey) warp.IsWarpActive = isActive;
+		}
+	}
+
+
+	public void ActivateWarp(string key, bool isActive = true) {
+
+		if (warps.ContainsKey(key)) {
+			warps[key].IsWarpActive = isActive;
+		}
 
 	}
 

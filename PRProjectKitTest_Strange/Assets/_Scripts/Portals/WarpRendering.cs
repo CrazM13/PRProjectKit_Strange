@@ -13,8 +13,6 @@ public class WarpRendering : MonoBehaviour {
 	private Warp warp;
 
 	private void OnEnable() {
-		//RenderPipelineManager.beginCameraRendering += UpdateCamera;
-
 		warp = GetComponent<Warp>();
 
 		renderTexture = RenderTexture.GetTemporary(Screen.width, Screen.height);
@@ -22,23 +20,15 @@ public class WarpRendering : MonoBehaviour {
 		meshRenderer.material.SetTexture("_MainTex", renderTexture);
 	}
 
-	private void OnDisable() {
-		//RenderPipelineManager.beginCameraRendering -= UpdateCamera;
-	}
-
 	private void Update() {
-		if (warp) {
+
+
+		if (warp && warp.IsWarpActive) {
 			Warp partner = warp.Partner;
 
 			if (partner) RenderWarp(partner, Camera.main);
-		}
-	}
-
-	private void UpdateCamera(ScriptableRenderContext _, Camera camera) {
-		if (warp) {
-			Warp partner = warp.Partner;
-
-			if (partner) RenderWarp(partner, camera);
+		} else {
+			meshRenderer.enabled = false;
 		}
 	}
 
@@ -55,6 +45,8 @@ public class WarpRendering : MonoBehaviour {
 		Vector3 relativeRotation = transform.InverseTransformDirection(camera.transform.forward);
 		relativeRotation = Vector3.Scale(relativeRotation, new Vector3(-1, 1, -1));
 		warpCamera.transform.forward = warpPartner.transform.TransformDirection(relativeRotation);
+
+		meshRenderer.enabled = true;
 	}
 
 

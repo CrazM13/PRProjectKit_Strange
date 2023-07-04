@@ -90,6 +90,8 @@ public class BaseCharacterController : MonoBehaviour {
 
 	public float CurrentSpeed => acceleration.Evaluate(movementTime) * movementSpeed * SpeedModifier;
 
+	public bool IsMoving => movementTime > 0;
+
 	public float SpeedModifier => currentMovementType switch {
 		MovementType.Sprint => sprintingSpeedPercentage,
 		MovementType.Crouch => crouch.speedPercentage,
